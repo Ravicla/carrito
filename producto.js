@@ -2,7 +2,8 @@ class Producto {
     constructor(...info) {
         this.sku = info[0];
         this.title = info[1];
-        this.price = Number (info[2]);
+        this.quantity = Number (info[2]);
+        this.price = Number (info[3]);
     }
     getSku() {
         return this.sku;
@@ -12,5 +13,8 @@ class Producto {
     }
     getPrice() {
         return this.price;
+    }
+    getQuantity() {
+        return this.quantity;
     }
 }

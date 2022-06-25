@@ -10,11 +10,10 @@ document.addEventListener('DOMContentLoaded',() => {
   //guarda productos
   const guardarProducto = (data) => {
     data.products.forEach(producto => {
-      const nuevoProducto = new Producto (producto.SKU, producto.title, producto.price);
+      const nuevoProducto = new Producto (producto.SKU, producto.title,0, producto.price);
       objetoCarrito.guardarProducto(nuevoProducto);  
     });
   };
-  console.log(objetoCarrito.obtenerProductos());
   //pinta carrito
   const pintarCarrito = (currency, listaProductos) => {  
     const carritoEl = document.querySelector('#contenido');
@@ -26,6 +25,7 @@ document.addEventListener('DOMContentLoaded',() => {
       sumarButton.innerText = '+';
       sumarButton.setAttribute('sumar-sku', product.getSku());
       sumarButton.setAttribute('sumar-precio', product.getPrice());
+      sumarButton.setAttribute('currency', currency);
       sumarButton.addEventListener('click', sumarButtonClickHandler);
       
       const calcularInput = document.createElement('input');
@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded',() => {
       restarButton.innerText = '-';
       restarButton.setAttribute('restar-sku', product.getSku());
       restarButton.setAttribute('restar-precio', product.getPrice());
+      restarButton.setAttribute('currency', currency);
       restarButton.addEventListener('click', restarButtonClickHandler);
 
       const tr = document.createElement('tr');
@@ -59,7 +60,7 @@ document.addEventListener('DOMContentLoaded',() => {
 
       const tdcurrency = document.createElement ('td');
       const curre = document.createElement ('p');
-      curre.innerHTML= `0${currency}`;
+      curre.innerHTML= `0 ${currency}`;
       tdcurrency.appendChild(curre);
       curre.setAttribute('id', "td_" + product.getSku ());
 
@@ -75,27 +76,39 @@ document.addEventListener('DOMContentLoaded',() => {
 
   const sumarButtonClickHandler = (event) => {       
     const codigoSku = event.target.getAttribute('sumar-sku');
+    const currency = event.target.getAttribute('currency');
     const inputSku = document.getElementById(codigoSku);
-    let acc = Number(inputSku.value);
-    inputSku.value = acc + 1;
+    let valorInput = Number(inputSku.value);
+    let unidades = valorInput + 1;
+    inputSku.value = unidades;
+    objetoCarrito.actualizarUnidades(codigoSku,unidades);
+    const productoActualizado = objetoCarrito.obtenerInformacionProducto(codigoSku);
     //actualizar total
-    const calcularTotal = document.getElementById ("td_"+codigoSku);
+    const columnaTotal = document.getElementById ("td_"+codigoSku);
     const calcularPrecio = event.target.getAttribute('sumar-precio');
-    console.log(calcularTotal, calcularPrecio);
-    calcularTotal.innerHTML = calcularPrecio*(inputSku.value);      
+    //console.log(calcularTotal, calcularPrecio);
+    columnaTotal.innerHTML = (calcularPrecio*(inputSku.value)).toFixed(2) +" "+ currency;      
   };
   
   const restarButtonClickHandler = (event) => {
-    const restarSku = event.target.getAttribute('restar-sku');
-    const calcularSku = document.getElementById(restarSku);
-    let acc = Number(calcularSku.value);
-    if (acc > 0) {
-      calcularSku.value = acc - 1; 
+    const codigoSku = event.target.getAttribute('restar-sku');
+    const currency = event.target.getAttribute('currency');
+    const inputSku = document.getElementById(codigoSku);
+    let valorInput = Number(inputSku.value);
+    let unidades = 0;
+    if (valorInput > 0) {
+      unidades = valorInput - 1; 
     } 
-    const calcularTotal = document.getElementById ("td_"+restarSku);
+    inputSku.value = unidades;
+    objetoCarrito.actualizarUnidades(codigoSku,unidades);
+    const productoActualizado = objetoCarrito.obtenerInformacionProducto(codigoSku);
+    //actualizar total
+    const columnaTotal = document.getElementById ("td_"+codigoSku);
     const calcularPrecio = event.target.getAttribute('restar-precio');
-    console.log(calcularTotal, calcularPrecio);
-    calcularTotal.innerHTML = calcularPrecio*(calcularSku.value);
+    //console.log(calcularTotal, calcularPrecio);
+    columnaTotal.innerHTML = (calcularPrecio*(inputSku.value)).toFixed(2) +" "+ currency;
+
+   
   };
 
 });
