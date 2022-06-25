@@ -41,7 +41,6 @@ document.addEventListener('DOMContentLoaded',() => {
       restarButton.addEventListener('click', restarButtonClickHandler);
 
       const tr = document.createElement('tr');
-      let content = "";
 
       const tdtitle = document.createElement ('td');
       const title = document.createElement ('p');
@@ -60,11 +59,9 @@ document.addEventListener('DOMContentLoaded',() => {
 
       const tdcurrency = document.createElement ('td');
       const curre = document.createElement ('p');
-      curre.innerHTML= `0 ${currency}`;
+      curre.innerHTML= `0.00 ${currency}`;
       tdcurrency.appendChild(curre);
       curre.setAttribute('id', "td_" + product.getSku ());
-
-      tr.innerHTML = content;
 
       tr.appendChild(tdtitle);    
       tr.appendChild(tdcantidad);
@@ -83,11 +80,10 @@ document.addEventListener('DOMContentLoaded',() => {
     inputSku.value = unidades;
     objetoCarrito.actualizarUnidades(codigoSku,unidades);
     const productoActualizado = objetoCarrito.obtenerInformacionProducto(codigoSku);
-    //actualizar total
-    const columnaTotal = document.getElementById ("td_"+codigoSku);
-    const calcularPrecio = event.target.getAttribute('sumar-precio');
-    //console.log(calcularTotal, calcularPrecio);
-    columnaTotal.innerHTML = (calcularPrecio*(inputSku.value)).toFixed(2) +" "+ currency;      
+    productoActualizado.forEach (producto => {
+      const columnaTotal = document.getElementById ("td_"+codigoSku);
+      columnaTotal.innerHTML = (producto.getPrice()*(producto.getQuantity())).toFixed(2) +" "+ currency;  
+    });        
   };
   
   const restarButtonClickHandler = (event) => {
@@ -102,13 +98,10 @@ document.addEventListener('DOMContentLoaded',() => {
     inputSku.value = unidades;
     objetoCarrito.actualizarUnidades(codigoSku,unidades);
     const productoActualizado = objetoCarrito.obtenerInformacionProducto(codigoSku);
-    //actualizar total
-    const columnaTotal = document.getElementById ("td_"+codigoSku);
-    const calcularPrecio = event.target.getAttribute('restar-precio');
-    //console.log(calcularTotal, calcularPrecio);
-    columnaTotal.innerHTML = (calcularPrecio*(inputSku.value)).toFixed(2) +" "+ currency;
-
-   
+    productoActualizado.forEach (producto => {
+      const columnaTotal = document.getElementById ("td_"+codigoSku);
+      columnaTotal.innerHTML = (producto.getPrice()*(producto.getQuantity())).toFixed(2) +" "+ currency;  
+    });  
   };
 
 });
