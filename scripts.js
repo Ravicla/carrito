@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded',() => {
   .then(response => response.json())
   .then(data => {
     guardarProducto(data);
-    pintarCarrito(data.currency, objetoCarrito.obtenerProductos());
+    pintarProductos(data.currency, objetoCarrito.obtenerProductos());
   });
   //guarda productos
   const guardarProducto = (data) => {
@@ -14,17 +14,15 @@ document.addEventListener('DOMContentLoaded',() => {
       objetoCarrito.guardarProducto(nuevoProducto);  
     });
   };
-  //pinta carrito
-  const pintarCarrito = (currency, listaProductos) => {  
+  //pinta productos
+  const pintarProductos = (currency, listaProductos) => {  
     const carritoEl = document.querySelector('#contenido');
     carritoEl.innerHTML = "";
-    console.log(listaProductos);
     listaProductos.forEach(product => {
 
       const sumarButton = document.createElement('button');
       sumarButton.innerText = '+';
       sumarButton.setAttribute('sumar-sku', product.getSku());
-      sumarButton.setAttribute('sumar-precio', product.getPrice());
       sumarButton.setAttribute('currency', currency);
       sumarButton.addEventListener('click', sumarButtonClickHandler);
       
@@ -67,9 +65,46 @@ document.addEventListener('DOMContentLoaded',() => {
       tr.appendChild(tdcantidad);
       tr.appendChild(tdprice);
       tr.appendChild(tdcurrency);
-      carritoEl.appendChild(tr);          
+      carritoEl.appendChild(tr);       
+      
+      /*const informacionTotal = document.createElement('td');
+      const detalleTotal = document.createElement('p');
+      detalleTotal.innerHTML= `0.00 ${currency}`;
+      informacionTotal.appendChild(detalleTotal); */
+
+
     });
   };
+  const pintarCarrito = (currency) => {
+    const totalEl = document.querySelector('#informacion');
+    totalEl.innerText = "";
+    objetoCarrito.obtenerCarrito().forEach(product => {
+      const tr = document.createElement('tr');
+
+      const nombreProducto = document.createElement('td');
+      const detalleProducto = document.createElement('p');
+      detalleProducto.innerHTML = product.getTitle();
+
+      const totalProducto = document.createElement('td')
+      const detalleTotal = document.createElement('p');
+      detalleTotal.innerHTML = (product.getPrice()*(product.getQuantity())).toFixed(2) +" "+ currency;
+
+      nombreProducto.appendChild(detalleProducto);
+      totalProducto.appendChild(detalleTotal);
+
+      tr.appendChild(nombreProducto);
+      tr.appendChild(totalProducto);
+      totalEl.appendChild(tr);
+
+    });
+    const total = objetoCarrito.obtenerCarrito().reduce((acc, producto) => {
+      return acc += (producto.getPrice()*(producto.getQuantity()));
+    }, 0);
+    console.log(total.toFixed(2));
+    const coltotal = document.getElementById('totalPagar');
+    coltotal.innerHTML = total.toFixed(2)+" "+ currency;
+  }
+ 
 
   const sumarButtonClickHandler = (event) => {       
     const codigoSku = event.target.getAttribute('sumar-sku');
@@ -83,7 +118,10 @@ document.addEventListener('DOMContentLoaded',() => {
     productoActualizado.forEach (producto => {
       const columnaTotal = document.getElementById ("td_"+codigoSku);
       columnaTotal.innerHTML = (producto.getPrice()*(producto.getQuantity())).toFixed(2) +" "+ currency;  
-    });        
+    });
+    console.log(objetoCarrito.obtenerCarrito());
+
+    pintarCarrito(currency);
   };
   
   const restarButtonClickHandler = (event) => {
@@ -102,6 +140,12 @@ document.addEventListener('DOMContentLoaded',() => {
       const columnaTotal = document.getElementById ("td_"+codigoSku);
       columnaTotal.innerHTML = (producto.getPrice()*(producto.getQuantity())).toFixed(2) +" "+ currency;  
     });  
+    
+    console.log(objetoCarrito.obtenerCarrito()); 
+    pintarCarrito(currency);
   };
+
+
+
 
 });
