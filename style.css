@@ -1,3 +1,7 @@
+html {
+    width: 80%;
+    margin: 0 auto; 
+}
 .header {
     border-bottom: 2px solid #cccccc; 
     display: flex;
@@ -5,32 +9,17 @@
     font-weight: bold;
     margin: 16px;
 }
-.container {
-    display: flex;  
+  
+td {
+    vertical-align:middle;
 }
-.table1 {
-    flex-grow: 2;
-}    
-
-.table1 th {
-    text-align: left;
-    border-bottom: 2px solid #ddd;     
+.table-striped td {
+    width: 20px;
+    line-height: 0; 
 }
-.table1 td {
-    border-bottom: 1px solid #ddd;     
+th {
+    vertical-align:middle;
 }
-
-.table2  {
-    
-    flex-grow: 1;
-   
-    /*padding: 0 24px; 
-    padding: px;
-    text-align: left;
-    border-top: 1px solid #ddd;     */
-}
-
-
 
 
 
