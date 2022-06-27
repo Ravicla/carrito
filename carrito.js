@@ -24,14 +24,16 @@ class Carrito {
     });
   }
   obtenerCarrito() {
-    //return this.productos.reduce((acc, producto) => {
-      //return acc += producto.price;
-    //}, 0);  
     return this.productos.filter(producto => {
       if  (producto.getQuantity() >0) {
         return producto;
       }
-    });
-    
+    }); 
+  }
+
+  obtenerCalculoTotalCarrito(){
+    return this.productos.reduce((acc, producto) => {
+      return acc += (producto.getPrice()*(producto.getQuantity()));
+    }, 0);
   }
 }

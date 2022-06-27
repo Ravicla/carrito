@@ -7,14 +7,14 @@ document.addEventListener('DOMContentLoaded',() => {
     guardarProducto(data);
     pintarProductos(data.currency, objetoCarrito.obtenerProductos());
   });
-  //guarda productos
+
   const guardarProducto = (data) => {
     data.products.forEach(producto => {
       const nuevoProducto = new Producto (producto.SKU, producto.title,0, producto.price);
       objetoCarrito.guardarProducto(nuevoProducto);  
     });
   };
-  //pinta productos
+ 
   const pintarProductos = (currency, listaProductos) => {  
     const carritoEl = document.querySelector('#contenido');
     carritoEl.innerHTML = "";
@@ -66,13 +66,6 @@ document.addEventListener('DOMContentLoaded',() => {
       tr.appendChild(tdprice);
       tr.appendChild(tdcurrency);
       carritoEl.appendChild(tr);       
-      
-      /*const informacionTotal = document.createElement('td');
-      const detalleTotal = document.createElement('p');
-      detalleTotal.innerHTML= `0.00 ${currency}`;
-      informacionTotal.appendChild(detalleTotal); */
-
-
     });
   };
   const pintarCarrito = (currency) => {
@@ -97,10 +90,7 @@ document.addEventListener('DOMContentLoaded',() => {
       totalEl.appendChild(tr);
 
     });
-    const total = objetoCarrito.obtenerCarrito().reduce((acc, producto) => {
-      return acc += (producto.getPrice()*(producto.getQuantity()));
-    }, 0);
-    console.log(total.toFixed(2));
+    const total = objetoCarrito.obtenerCalculoTotalCarrito();
     const coltotal = document.getElementById('totalPagar');
     coltotal.innerHTML = total.toFixed(2)+" "+ currency;
   }
@@ -119,8 +109,6 @@ document.addEventListener('DOMContentLoaded',() => {
       const columnaTotal = document.getElementById ("td_"+codigoSku);
       columnaTotal.innerHTML = (producto.getPrice()*(producto.getQuantity())).toFixed(2) +" "+ currency;  
     });
-    console.log(objetoCarrito.obtenerCarrito());
-
     pintarCarrito(currency);
   };
   
@@ -140,12 +128,6 @@ document.addEventListener('DOMContentLoaded',() => {
       const columnaTotal = document.getElementById ("td_"+codigoSku);
       columnaTotal.innerHTML = (producto.getPrice()*(producto.getQuantity())).toFixed(2) +" "+ currency;  
     });  
-    
-    console.log(objetoCarrito.obtenerCarrito()); 
     pintarCarrito(currency);
   };
-
-
-
-
 });

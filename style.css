@@ -11,21 +11,12 @@ html {
 }
   
 td {
-    vertical-align:middle;
+    vertical-align: middle;
 }
 .table-striped td {
     width: 20px;
-    line-height: 0; 
+    line-height: 0;   
 }
-th {
-    vertical-align:middle;
-}
-
-
-
-
-
-
 
 button {
     background-color: white; 
